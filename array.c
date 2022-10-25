@@ -5,6 +5,7 @@
 #include "array.h"
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define DEFAULT_CAPACITY 10
 
@@ -23,8 +24,12 @@ Array *new_array_capacity(size_t capacity) {
     array->items = malloc(capacity);
 }
 
+void array_init_with_capacity(struct Array **a, size_t capacity) {
+    *a = new_array_capacity(capacity);
+}
+
 void array_init(struct Array **a) {
-    *a = new_array_capacity(DEFAULT_CAPACITY);
+    array_init_with_capacity(a, DEFAULT_CAPACITY);
 }
 
 void array_resize(Array *array, size_t new_size) {
@@ -41,11 +46,19 @@ void array_add(struct Array *a, const void *item, size_t size) {
 }
 
 void array_get(struct Array *a, size_t pos, size_t size, void *dest) {
+    if (pos + size > a->size) {
+        assert(!"Index out of bounds");
+    }
+
     memcpy(dest, a->items + pos, size);
 }
 
 void array_remove(struct Array *a, size_t size) {
-    // just update the size; no shrink functions implemented so far
+    if (size > a->size) {
+        assert(!"No more items");
+    }
+
+    // just update the size; no shrink functions implemented yet
     a->size -= size;
 }
 

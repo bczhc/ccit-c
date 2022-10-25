@@ -9,6 +9,8 @@
 
 struct Array;
 
+void array_init_with_capacity(struct Array **a, size_t capacity);
+
 void array_init(struct Array **a);
 
 void array_free(struct Array *a);
