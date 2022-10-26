@@ -9,17 +9,17 @@
 #include <string.h>
 #include <assert.h>
 #include "array.h"
-#include <pthread.h>
+#include "string.h"
 
 /**
  * read a line from a stream
  * now it only handles LF ('\\n') line delimiters
  * @param fp
- * @return line buffer, `array_free` is required
+ * @return line buffer, `string_free` is required
  */
-Array read_line(FILE *fp) {
-    Array buf;
-    array_init(&buf);
+String read_line(FILE *fp) {
+    String line;
+    string_init(&line);
 
     char c;
     while (1) {
@@ -28,32 +28,33 @@ Array read_line(FILE *fp) {
             // error or EOF meets
             break;
         }
-        array_add(&buf, &c, 1);
+        string_push(&line, c);
         if (c == '\n') {
             break;
         }
     }
 
-    return buf;
+    return line;
 }
 
 int main() {
-    Array line = read_line(stdin);
-    {
-        // end of string
-        char c = '\0';
-        array_add(&line, &c, 1);
+    String line = read_line(stdin);
+
+    printf("Input: %s\n", string_data(&line));
+
+    char *end_pos;
+    long parsed = strtol(string_data(&line), &end_pos, 10);
+
+    if (end_pos == string_data(&line)) {
+        printf("No digits found");
+        return 1;
     }
-    void *line_inner = array_items(&line);
-    printf("Input: %s\n", (char *) line_inner);
-    long parsed = strtol((const char *) line_inner, NULL, 10);
-    array_free(&line);
+    string_free(&line);
 
     if ((parsed == LONG_MAX || parsed == LONG_MIN) && errno == ERANGE) {
         printf("Out of range!\n");
         return 1;
     }
-
 
     printf("Parsed: %ld\n", parsed);
 

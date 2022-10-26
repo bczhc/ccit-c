@@ -25,6 +25,12 @@ void array_remove(Array *a, size_t size);
 
 size_t array_size(const Array *a);
 
+char array_remove_char(Array *a);
+
+void array_add_char(Array *a, char c);
+
+char array_get_char(Array *a, size_t i);
+
 void array_get(const Array *a, size_t pos, size_t size, void *dest);
 
 void *array_items(const Array *a);

@@ -36,6 +36,14 @@ void array_add(Array *a, const void *item, size_t size) {
     a->size = new_size;
 }
 
+void array_add_char(Array *a, char c) {
+    array_add(a, &c, 1);
+}
+
+char array_get_char(Array *a, size_t i) {
+    return ((char *) a->items)[i];
+}
+
 void array_get(const Array *a, size_t pos, size_t size, void *dest) {
     if (pos + size > a->size) {
         assert(!"Index out of bounds");
@@ -51,6 +59,11 @@ void array_remove(Array *a, size_t size) {
 
     // just update the size; no shrink functions implemented yet
     a->size -= size;
+}
+
+char array_remove_char(Array *a) {
+    array_remove(a, 1);
+    return ((const char *) a->items)[a->size];
 }
 
 size_t array_size(const Array *a) {

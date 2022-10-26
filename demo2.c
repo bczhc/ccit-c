@@ -5,23 +5,23 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "array.h"
+#include "string.h"
 
 int main() {
-    Array array;
-    array_init(&array);
+    String s;
+    string_init(&s);
 
-    for (int i = 0; i < 50; ++i) {
-        array_add(&array, &i, sizeof(int));
-    }
+    string_push(&s,'h');
+    string_push(&s,'e');
+    string_push(&s,'l');
+    string_push(&s,'l');
+    string_push(&s,'o');
+    string_push_str(&s, ", world!", NULL);
 
-    array_remove(&array, sizeof(int));
+    printf("%zu\n", string_length(&s));
+    printf("%s\n", string_data(&s));
 
-    for (int i = 0; i < array_size(&array) / sizeof(int); ++i) {
-        int get = ((int *) array_items(&array))[i];
-        printf("Get: %i\n", get);
-    }
-
-    array_free(&array);
+    string_free(&s);
 
     return 0;
 }
