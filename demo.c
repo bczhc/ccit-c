@@ -9,29 +9,53 @@
 #include <string.h>
 #include <assert.h>
 #include "array.h"
+#include <pthread.h>
+
+/**
+ * read a line from a stream
+ * now it only handles LF ('\\n') line delimiters
+ * @param fp
+ * @return line buffer, `array_free` is required
+ */
+Array read_line(FILE *fp) {
+    Array buf;
+    array_init(&buf);
+
+    char c;
+    while (1) {
+        size_t size = fread(&c, 1, 1, fp);
+        if (size == 0) {
+            // error or EOF meets
+            break;
+        }
+        array_add(&buf, &c, 1);
+        if (c == '\n') {
+            break;
+        }
+    }
+
+    return buf;
+}
 
 int main() {
-    struct Array *a;
-    array_init(&a);
-
-    for (int i = 0; i < 10; ++i) {
-        array_add(a, &i, sizeof(int));
-    }
-
-    array_remove(a, 2 * sizeof(int));
-
+    Array line = read_line(stdin);
     {
-        int item = 123;
-        array_add(a, &item, sizeof(int));
+        // end of string
+        char c = '\0';
+        array_add(&line, &c, 1);
+    }
+    void *line_inner = array_items(&line);
+    printf("Input: %s\n", (char *) line_inner);
+    long parsed = strtol((const char *) line_inner, NULL, 10);
+    array_free(&line);
+
+    if ((parsed == LONG_MAX || parsed == LONG_MIN) && errno == ERANGE) {
+        printf("Out of range!\n");
+        return 1;
     }
 
-    for (int i = 0; i < array_size(a) / sizeof(int); ++i) {
-        int get;
-        array_get(a, i * sizeof(int), sizeof(int), &get);
-        printf("Get: %d\n", get);
-    }
 
-    array_free(a);
+    printf("Parsed: %ld\n", parsed);
 
     return 0;
 }

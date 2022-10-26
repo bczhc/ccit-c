@@ -9,26 +9,17 @@
 
 #define DEFAULT_CAPACITY 10
 
-typedef struct Array Array;
-
-struct Array {
-    size_t capacity;
-    size_t size;
-    void *items;
-};
-
-Array *new_array_capacity(size_t capacity) {
-    Array *array = (Array *) malloc(sizeof(Array));
-    array->size = 0;
-    array->capacity = capacity;
-    array->items = malloc(capacity);
+void init_array_capacity(Array *a, size_t capacity) {
+    a->size = 0;
+    a->capacity = capacity;
+    a->items = malloc(capacity);
 }
 
-void array_init_with_capacity(struct Array **a, size_t capacity) {
-    *a = new_array_capacity(capacity);
+void array_init_with_capacity(Array *a, size_t capacity) {
+    init_array_capacity(a, capacity);
 }
 
-void array_init(struct Array **a) {
+void array_init(Array *a) {
     array_init_with_capacity(a, DEFAULT_CAPACITY);
 }
 
@@ -36,7 +27,7 @@ void array_resize(Array *array, size_t new_size) {
     array->items = realloc(array->items, new_size);
 }
 
-void array_add(struct Array *a, const void *item, size_t size) {
+void array_add(Array *a, const void *item, size_t size) {
     size_t new_size = a->size + size;
     if (new_size > a->capacity) {
         array_resize(a, new_size * 2);
@@ -45,7 +36,7 @@ void array_add(struct Array *a, const void *item, size_t size) {
     a->size = new_size;
 }
 
-void array_get(struct Array *a, size_t pos, size_t size, void *dest) {
+void array_get(const Array *a, size_t pos, size_t size, void *dest) {
     if (pos + size > a->size) {
         assert(!"Index out of bounds");
     }
@@ -53,7 +44,7 @@ void array_get(struct Array *a, size_t pos, size_t size, void *dest) {
     memcpy(dest, a->items + pos, size);
 }
 
-void array_remove(struct Array *a, size_t size) {
+void array_remove(Array *a, size_t size) {
     if (size > a->size) {
         assert(!"No more items");
     }
@@ -62,11 +53,14 @@ void array_remove(struct Array *a, size_t size) {
     a->size -= size;
 }
 
-size_t array_size(struct Array *a) {
+size_t array_size(const Array *a) {
     return a->size;
 }
 
-void array_free(struct Array *a) {
+void array_free(Array *a) {
     free(a->items);
-    free(a);
+}
+
+void *array_items(const Array *a) {
+    return a->items;
 }

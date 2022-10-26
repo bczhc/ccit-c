@@ -7,20 +7,26 @@
 
 #include <stddef.h>
 
-struct Array;
+typedef struct {
+    size_t capacity;
+    size_t size;
+    void *items;
+} Array;
 
-void array_init_with_capacity(struct Array **a, size_t capacity);
+void array_init_with_capacity(Array *a, size_t capacity);
 
-void array_init(struct Array **a);
+void array_init(Array *a);
 
-void array_free(struct Array *a);
+void array_free(Array *a);
 
-void array_add(struct Array *a, const void *item, size_t size);
+void array_add(Array *a, const void *item, size_t size);
 
-void array_remove(struct Array *a, size_t size);
+void array_remove(Array *a, size_t size);
 
-size_t array_size(struct Array *a);
+size_t array_size(const Array *a);
 
-void array_get(struct Array *a, size_t pos, size_t size, void *dest);
+void array_get(const Array *a, size_t pos, size_t size, void *dest);
+
+void *array_items(const Array *a);
 
 #endif //CCIT_C_ARRAY_H
