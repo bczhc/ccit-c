@@ -10,53 +10,28 @@
 #include <assert.h>
 #include "array.h"
 #include "string.h"
-
-/**
- * read a line from a stream
- * now it only handles LF ('\\n') line delimiters
- * @param fp
- * @return line buffer, `string_free` is required
- */
-String read_line(FILE *fp) {
-    String line;
-    string_init(&line);
-
-    char c;
-    while (1) {
-        size_t size = fread(&c, 1, 1, fp);
-        if (size == 0) {
-            // error or EOF meets
-            break;
-        }
-        string_push(&line, c);
-        if (c == '\n') {
-            break;
-        }
-    }
-
-    return line;
-}
+#include "common.h"
+#include <stdbool.h>
 
 int main() {
     String line = read_line(stdin);
 
     printf("Input: %s\n", string_data(&line));
 
-    char *end_pos;
-    long parsed = strtol(string_data(&line), &end_pos, 10);
+    ParseIntResult parsed = parse_int(string_data(&line));
 
-    if (end_pos == string_data(&line)) {
-        printf("No digits found");
-        return 1;
+    if (!parsed.ok) {
+        switch (parsed.data.error) {
+            case PIE_NO_DIGITS:
+                perror("PIE_NO_DIGITS");
+                break;
+            case PIE_OUT_OF_RANGE:
+                perror("PIE_OUT_OF_RANGE");
+                break;
+        }
+    } else {
+        printf("Parsed: %lu\n", parsed.data.result);
     }
-    string_free(&line);
-
-    if ((parsed == LONG_MAX || parsed == LONG_MIN) && errno == ERANGE) {
-        printf("Out of range!\n");
-        return 1;
-    }
-
-    printf("Parsed: %ld\n", parsed);
 
     return 0;
 }

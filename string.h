@@ -19,13 +19,16 @@ void string_init(String *s);
 
 void string_free(String *s);
 
-/**
- * @param end the end position of string `str`, inclusive, and `null` if `str` is null-terminated 
- */
-void string_push_str(String *s, const char *str, const char *end);
+void string_push_str(String *s, const char *ptr, size_t length);
 
 const char *string_data(String *s);
 
 size_t string_length(String *s);
+
+Array string_split(String *str, const char *separator, size_t sep_size);
+
+void string_init_with_capacity(String *s, size_t capacity);
+
+String string_new_from_str(const char *str, size_t length);
 
 #endif //CCIT_C_STRING_H
