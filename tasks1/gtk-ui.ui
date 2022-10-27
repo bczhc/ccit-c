@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object id="window" class="GtkWindow">
+        <property name="title">Grid</property>
+        <child>
+            <object id="grid" class="GtkGrid">
+                <property name="valign">center</property>
+                <property name="halign">center</property>
+                <child>
+                    <object id="length" class="GtkEntry">
+                        <property name="placeholder-text">长</property>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">0</property>
+                            <property name="row-span">1</property>
+                            <property name="column-span">1</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object id="width" class="GtkEntry">
+                        <property name="placeholder-text">宽</property>
+                        <layout>
+                            <property name="column">1</property>
+                            <property name="row">0</property>
+                            <property name="row-span">1</property>
+                            <property name="column-span">1</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object id="calc" class="GtkButton">
+                        <property name="label">计算面积</property>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">1</property>
+                            <property name="row-span">1</property>
+                            <property name="column-span">2</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object id="output" class="GtkLabel">
+                        <attributes>
+                            <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+                        </attributes>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">2</property>
+                            <property name="row-span">1</property>
+                            <property name="column-span">2</property>
+                        </layout>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

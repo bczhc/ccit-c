@@ -35,35 +35,18 @@ void eprintf(const char *format, ...) {
     va_end(p);
 }
 
-ParseIntResult parse_int(const char *s) {
+enum ParseIntResult parse_int(const char *s, i64 *res) {
     char *end_pos;
     long parsed = strtol(s, &end_pos, 10);
 
     if (end_pos == s) {
-        ParseIntResult r = {
-                .ok = false,
-                .data = {
-                        .error = PIE_NO_DIGITS
-                }
-        };
-        return r;
+        return PIE_NO_DIGITS;
     }
 
     if ((parsed == LONG_MAX || parsed == LONG_MIN) && errno == ERANGE) {
-        ParseIntResult r = {
-                .ok = false,
-                .data = {
-                        .error = PIE_OUT_OF_RANGE
-                }
-        };
-        return r;
+        return PIE_OUT_OF_RANGE;
     }
 
-    ParseIntResult r = {
-            .ok = true,
-            .data = {
-                    .result = parsed
-            }
-    };
-    return r;
+    *res = parsed;
+    return PIE_OK;
 }

@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-int mian() {
+int main() {
     int a, b;
     printf("请输入矩形的长和宽："), fflush(stdout);
     // TODO: invalid input and out of range handling

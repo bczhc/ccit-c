@@ -11,20 +11,16 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif ()
 
 add_library(
-        my-lib STATIC
+        common-lib STATIC
         array.c
         string.c
         common.c
 )
 
-add_executable(task1 tasks/task1.c)
-target_link_libraries(task1 my-lib)
-
-add_executable(task1-safe tasks/task1_safe.c)
-target_link_libraries(task1-safe my-lib)
-
 add_executable(demo demo.c)
-target_link_libraries(demo my-lib)
+target_link_libraries(demo common-lib)
 
 add_executable(demo2 demo2.c)
-target_link_libraries(demo2 my-lib)
+target_link_libraries(demo2 common-lib)
+
+add_subdirectory(tasks1)

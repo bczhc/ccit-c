@@ -20,19 +20,12 @@ String read_line(FILE *fp);
 
 void eprintf(const char *format, ...);
 
-enum ParseIntError {
+enum ParseIntResult {
+    PIE_OK,
     PIE_NO_DIGITS,
     PIE_OUT_OF_RANGE,
 };
 
-typedef struct {
-    bool ok;
-    union {
-        i64 result;
-        enum ParseIntError error;
-    } data;
-} ParseIntResult;
-
-ParseIntResult parse_int(const char *s);
+enum ParseIntResult parse_int(const char *s, i64 *res);
 
 #endif //CCIT_C_COMMON_H
