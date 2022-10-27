@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-u64 parse_int_check(const char *s) {
+i64 parse_int_check(const char *s) {
     ParseIntResult parsed = parse_int(s);
     if (parsed.ok) {
         return parsed.data.result;
@@ -20,6 +20,26 @@ u64 parse_int_check(const char *s) {
                 exit(EXIT_FAILURE);
         }
     }
+}
+
+bool check_u64_mul(u64 a, u64 b, u64 *res) {
+#ifdef GCC_BUILTIN_CHECKED_ARITHMETIC
+
+#if __WORDSIZE == 64
+    return __builtin_umull_overflow(a, b, res);
+#elif __WORDSIZE == 32
+    return __builtin_umulll_overflow(a, b, res);
+#endif // __WORDSIZE
+
+#else
+    if (b > UINT64_MAX / a) {
+        // overflow
+        return true;
+    } else {
+        *res = a * b;
+        return false;
+    }
+#endif // GCC_BUILTIN_CHECKED_ARITHMETIC
 }
 
 int main() {
@@ -37,10 +57,19 @@ int main() {
     String width_input = ((String *) split.items)[0];
     String height_input = ((String *) split.items)[1];
 
-    u64 width = parse_int_check(string_data(&width_input));
-    u64 height = parse_int_check(string_data(&height_input));
+    i64 width = parse_int_check(string_data(&width_input));
+    i64 height = parse_int_check(string_data(&height_input));
 
-    u64 area = width * height;
+    if (width < 0 && height < 0) {
+        eprintf("Requires positive numbers");
+        return 1;
+    }
+
+    u64 area;
+    if (check_u64_mul(width, height, &area)) {
+        eprintf("Multiplication overflow!");
+        return 1;
+    }
 
     printf("Rectangle area: %lu\n", area);
 

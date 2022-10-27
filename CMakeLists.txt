@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.19)
 
 set(CMAKE_C_STANDARD 17)
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_definitions(GNU_COMPILER)
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.2)
+        add_compile_definitions(GCC_BUILTIN_CHECKED_ARITHMETIC)
+    endif ()
+endif ()
+
 add_library(
         my-lib STATIC
         array.c

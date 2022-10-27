@@ -28,7 +28,7 @@ enum ParseIntError {
 typedef struct {
     bool ok;
     union {
-        u64 result;
+        i64 result;
         enum ParseIntError error;
     } data;
 } ParseIntResult;
