@@ -1,0 +1,6 @@
+file(GLOB APP_SOURCES ./*.c)
+SET(n 0)
+foreach (f ${APP_SOURCES})
+    MATH(EXPR n "${n}+1")
+    add_executable(${n} "${f}")
+endforeach()

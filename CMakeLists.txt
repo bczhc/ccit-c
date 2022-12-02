@@ -20,7 +20,5 @@ add_library(
 add_executable(demo demo.c)
 target_link_libraries(demo common-lib)
 
-add_executable(demo2 demo2.c)
-target_link_libraries(demo2 common-lib)
-
 add_subdirectory(tasks1)
+add_subdirectory(homework)
